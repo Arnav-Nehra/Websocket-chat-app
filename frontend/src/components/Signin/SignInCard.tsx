@@ -1,11 +1,15 @@
+import { Link } from "react-router";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import Loader from "../Loader";
+import { useState } from "react";
 
 export default function SignIn() {
+  const [loading, setLoading] = useState(false);
   return (
-    <div className="place-items-center mt-40 justify-center">
+    <div className="flex flex-col place-items-center mt-40 justify-center">
       <Card className="w-full max-w-sm mt-4 bg-black">
         <div className="flex gap-4 items-center justify-center">
           <img
@@ -52,16 +56,27 @@ export default function SignIn() {
         </CardContent>
         <CardFooter className="flex-col gap-2">
           <Button
-            className="bg-gray-800 hover:bg-gray-700 w-full "
+            disabled={loading}
+            onClick={() => {
+              //   TODO: : add the signin logic
+              setLoading(true);
+
+              setTimeout(() => setLoading(false), 2000);
+            }}
+            className="gap-4 bg-gray-800 hover:bg-gray-700 w-full "
             type="submit"
           >
             Login
+            {loading ? <Loader /> : ""}
           </Button>
           <h2 className="text-white text-md mt-4">
             Don't have an account ?&nbsp;
-            <a className="text-white  cursor-pointer underline-offset-4 hover:underline">
+            <Link
+              to={"/signup"}
+              className="text-white  cursor-pointer underline-offset-4 hover:underline"
+            >
               SignUp
-            </a>
+            </Link>
           </h2>
         </CardFooter>
       </Card>

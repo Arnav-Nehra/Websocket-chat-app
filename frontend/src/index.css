@@ -3,6 +3,19 @@
 
 @custom-variant dark (&:is(.dark *));
 
+html,
+body {
+  overscroll-behavior: none !important;
+  overflow-x: hidden;
+  height: 100%;
+  background-color: black;
+}
+
+#root {
+  height: 100vh;
+  overscroll-behavior: none;
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

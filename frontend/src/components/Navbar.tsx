@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { Button } from "./ui/button";
 
 export default function Navbar({ className }: { className: string }) {
@@ -18,12 +19,16 @@ export default function Navbar({ className }: { className: string }) {
       </div>
 
       <div className="mr-8 gap-4 flex">
-        <Button className="cursor-pointer hover:border-blue-300 hover:border-2  text-md rounded-xl">
-          SignIn
-        </Button>
-        <Button className="border-gray-400 cursor-pointer border-1 hover:border-2 hover:border-blue-300 text-md rounded-xl">
-          SignUp
-        </Button>
+        <Link to="/signin">
+          <Button className="cursor-pointer hover:border-blue-300 hover:border-2  text-md rounded-xl">
+            SignIn
+          </Button>
+        </Link>
+        <Link to="/signup">
+          <Button className="border-gray-400 cursor-pointer border-1 hover:border-2 hover:border-blue-300 text-md rounded-xl">
+            SignUp
+          </Button>
+        </Link>
       </div>
     </div>
   );
