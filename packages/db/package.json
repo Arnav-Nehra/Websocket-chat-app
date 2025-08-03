@@ -11,5 +11,11 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "Database utilities and models for the WebSocket chat app"
+  "description": "Database utilities and models for the WebSocket chat app",
+  "dependencies": {
+    "@prisma/client": "^6.13.0"
+  },
+  "exports": {
+    "./client": "./src/index.ts"
+  }
 }

@@ -2,4 +2,36 @@
 > @websocket-chat-app/http-backend@1.0.0 build
 > tsc -b
 
-[1G[0K[1G[0K⠙[1G[0K
+[1G[0K[96msrc/index.ts[0m:[93m21[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+[7m21[0m       email: result.data?.username,
+[7m  [0m [91m      ~~~~~[0m
+
+  [96m../../packages/db/generated/prisma/index.d.ts[0m:[93m1999[0m:[93m5[0m
+    [7m1999[0m     email: string
+    [7m    [0m [96m    ~~~~~[0m
+    The expected type comes from property 'email' which is declared here on type '(Without<UserCreateInput, UserUncheckedCreateInput> & UserUncheckedCreateInput) | (Without<...> & UserCreateInput)'
+
+[96msrc/index.ts[0m:[93m22[0m:[93m7[0m - [91merror[0m[90m TS2322: [0mType 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+[7m22[0m       password: result.data?.password,
+[7m  [0m [91m      ~~~~~~~~[0m
+
+  [96m../../packages/db/generated/prisma/index.d.ts[0m:[93m2000[0m:[93m5[0m
+    [7m2000[0m     password: string
+    [7m    [0m [96m    ~~~~~~~~[0m
+    The expected type comes from property 'password' which is declared here on type '(Without<UserCreateInput, UserUncheckedCreateInput> & UserUncheckedCreateInput) | (Without<...> & UserCreateInput)'
+
+
+Found 2 errors.
+
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m Lifecycle script `build` failed with error:
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mcode[39m [33m1[39m
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mpath[39m /Users/arnavnehra/dev/projects/Websocket-chat-app/apps/http-backend
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mworkspace[39m @websocket-chat-app/http-backend@1.0.0
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mlocation[39m /Users/arnavnehra/dev/projects/Websocket-chat-app/apps/http-backend
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m command failed
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mcommand[39m sh -c tsc -b
+[1G[0K⠙[1G[0K
