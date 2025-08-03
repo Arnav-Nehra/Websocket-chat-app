@@ -1,6 +1,6 @@
 import { WebSocket, WebSocketServer } from "ws";
 
-const ws = new WebSocketServer({ port: 8080 });
+const ws = new WebSocketServer({ port: 3000 });
 
 interface userReq {
   roomid: string;

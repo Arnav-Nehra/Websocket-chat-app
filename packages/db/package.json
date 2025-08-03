@@ -1,0 +1,15 @@
+{
+  "name": "@websocket-chat-app/db",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "Database utilities and models for the WebSocket chat app"
+}
