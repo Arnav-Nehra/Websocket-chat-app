@@ -3,10 +3,11 @@ import express from "express";
 import { signUpSchema } from "./zodtypes.js";
 import { prismaClient } from "@websocket-chat-app/db/client";
 import bcrypt from "bcrypt";
-// TODO   :
-// 1. make the signup point (add multer for photo )
+import middleware from "./middleware.js";
+import { AuthInterface } from "./middleware.js";
+
+//  TODO : add multer to signup point to add photo
 // 2. make the signin point
-// 3.allow to add friends
 // 4. save messages
 
 const app = express();
@@ -42,7 +43,7 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-app.post("/sigin", async (req, res) => {
+app.post("/signin", async (req, res) => {
   const signInBody = signUpSchema.safeParse(req.body);
 
   if (signInBody.success) {
@@ -62,7 +63,10 @@ app.post("/sigin", async (req, res) => {
           res.status(403).json({ message: "user not authorized" });
           return;
         }
-        const jwttoken = jwt.sign({ UserId: user.id }, "arnavsecret");
+        const jwttoken = jwt.sign(
+          { userEmail: user.email, userId: user.id },
+          "arnavsecret",
+        );
         res.json(jwttoken);
       }
     } catch (error) {
@@ -77,7 +81,7 @@ app.post("/sigin", async (req, res) => {
   }
 });
 
-app.get("/search", async (req, res) => {
+app.get("/search", middleware, async (req, res) => {
   const { username } = req.query;
 
   if (typeof username !== "string") {
@@ -94,6 +98,65 @@ app.get("/search", async (req, res) => {
     res.status(200).json(results);
   } catch (error) {
     res.json({});
+  }
+});
+
+app.post("/add-friend", middleware, async (req: AuthInterface, res) => {
+  const requesterId = req.body.requesterId;
+  const addressId = req.body.addressId;
+
+  if (!requesterId || !addressId) {
+    return res
+      .status(402)
+      .json({ message: "both reqId and addId are required" });
+  }
+
+  if (requesterId == addressId) {
+    return res.status(402).json({ message: "already friends " });
+  }
+
+  try {
+    const friend = await prismaClient.friendShip.create({
+      data: {
+        requesterId: requesterId,
+        addresseId: addressId,
+        status: "PENDING",
+      },
+    });
+    res.json(friend);
+  } catch (error) {
+    res.json({ message: "internal server error" });
+  }
+});
+
+app.post("/accept-friend-req", async (req: AuthInterface, res) => {
+  const requesterId = req.body.requesterId;
+  const addresseId = req.body.addresseId;
+
+  if (!requesterId || !addresseId) {
+    return res.status(402).json("both id required");
+  }
+  try {
+    const accepted = await prismaClient.friendShip.update({
+      where: {
+        requesterId_addresseId: {
+          requesterId,
+          addresseId,
+        },
+      },
+      data: {
+        status: "ACCEPTED",
+      },
+    });
+  } catch (err) {
+    res.json({ message: "internal server error" });
+  }
+});
+
+app.get("/messages", async (req: AuthInterface, res) => {
+  const { id } = req.query;
+
+  if (id) {
   }
 });
 app.listen(3000);

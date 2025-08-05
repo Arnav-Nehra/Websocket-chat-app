@@ -8,9 +8,33 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum FriendShipStatus {
+  PENDING
+  ACCEPTED
+  BLOCKED
+}
+
 model User {
   id       String @id @default(uuid())
   email    String @unique
   password String
   name     String
+
+  sentreq FriendShip[] @relation("requester")
+
+  receivedreq FriendShip[] @relation("addresse")
+}
+
+model FriendShip {
+  id String @id @default(uuid())
+
+  requester   User   @relation("requester", fields: [requesterId], references: [id])
+  requesterId String
+
+  addresse   User   @relation("addresse", fields: [addresseId], references: [id])
+  addresseId String
+
+  status FriendShipStatus @default(PENDING)
+
+  @@unique([requesterId, addresseId])
 }
