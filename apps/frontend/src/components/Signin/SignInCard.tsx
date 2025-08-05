@@ -2,9 +2,9 @@ import { Link } from "react-router";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { Input } from "../ui/input";
-import { Label } from "../ui/label";
 import Loader from "../Loader";
 import { useState } from "react";
+
 
 export default function SignIn() {
   const [loading, setLoading] = useState(false);
@@ -25,7 +25,7 @@ export default function SignIn() {
           <form>
             <div className="flex flex-col gap-8">
               <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+                <Label >Email</Label>
                 <Input
                   id="email"
                   type="email"
@@ -36,7 +36,7 @@ export default function SignIn() {
               </div>
               <div className="grid gap-2 mt-2">
                 <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
+                  <Label >Password</Label>
                 </div>
                 <Input
                   className="mt-2"
