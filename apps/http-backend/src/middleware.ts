@@ -26,6 +26,7 @@ export default function middleware(
       return res.status(403).json({ message: "user not authorized" });
     }
   } catch (err) {
+    console.log(err);
     res.json("invalid or expired token");
   }
 }

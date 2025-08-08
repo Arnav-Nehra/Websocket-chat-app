@@ -3,11 +3,13 @@ import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { Input } from "../ui/input";
 import Loader from "../Loader";
-import { useState } from "react";
-
-
+import { useRef, useState } from "react";
+import { Label } from "../ui/label";
+import axios from "axios";
 export default function SignIn() {
   const [loading, setLoading] = useState(false);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
   return (
     <div className="flex flex-col place-items-center mt-40 justify-center">
       <Card className="w-full max-w-sm mt-4 bg-black">
@@ -25,8 +27,9 @@ export default function SignIn() {
           <form>
             <div className="flex flex-col gap-8">
               <div className="grid gap-2">
-                <Label >Email</Label>
+                <Label>Email</Label>
                 <Input
+                  ref={emailRef}
                   id="email"
                   type="email"
                   placeholder="m@example.com"
@@ -36,9 +39,10 @@ export default function SignIn() {
               </div>
               <div className="grid gap-2 mt-2">
                 <div className="flex items-center">
-                  <Label >Password</Label>
+                  <Label>Password</Label>
                 </div>
                 <Input
+                  ref={passwordRef}
                   className="mt-2"
                   id="password"
                   type="password"
@@ -57,11 +61,22 @@ export default function SignIn() {
         <CardFooter className="flex-col gap-2">
           <Button
             disabled={loading}
-            onClick={() => {
-              //   TODO: : add the signin logic
-              setLoading(true);
-
-              setTimeout(() => setLoading(false), 2000);
+            onClick={async () => {
+              try {
+                setLoading(true);
+                const response = await axios.post(
+                  "http://localhost:3000/signin",
+                  {
+                    username: emailRef.current?.value || "",
+                    password: passwordRef.current?.value || "",
+                  },
+                );
+                localStorage.setItem("token", response.data);
+                setLoading(false);
+              } catch (err) {
+                setLoading(false);
+                console.log(err);
+              }
             }}
             className="gap-4 bg-gray-800 hover:bg-gray-700 w-full "
             type="submit"

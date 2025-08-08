@@ -1,17 +1,19 @@
 import jwt from "jsonwebtoken";
 import express from "express";
 import { signUpSchema } from "./zodtypes.js";
+import { signInSchema } from "./zodtypes.js";
 import { prismaClient } from "@websocket-chat-app/db/client";
 import bcrypt from "bcrypt";
 import middleware from "./middleware.js";
 import { AuthInterface } from "./middleware.js";
+import cors from "cors";
 
 //  TODO : add multer to signup point to add photo
 // 2. make the signin point
 // 4. save messages
 
 const app = express();
-
+app.use(cors());
 app.use(express.json());
 
 const hashPassword = async (password: string) => {
@@ -31,7 +33,7 @@ app.post("/signup", async (req, res) => {
         data: {
           email: signUpBody.data.username,
           password: hashedPassword,
-          name: signUpBody.data.username,
+          name: signUpBody.data.name,
         },
       });
       res.status(200).json(User);
@@ -44,7 +46,7 @@ app.post("/signup", async (req, res) => {
 });
 
 app.post("/signin", async (req, res) => {
-  const signInBody = signUpSchema.safeParse(req.body);
+  const signInBody = signInSchema.safeParse(req.body);
 
   if (signInBody.success) {
     try {
@@ -64,7 +66,7 @@ app.post("/signin", async (req, res) => {
           return;
         }
         const jwttoken = jwt.sign(
-          { userEmail: user.email, userId: user.id },
+          { userEmail: user.email, userId: user.id, name: user.name },
           "arnavsecret",
         );
         res.json(jwttoken);
@@ -81,14 +83,17 @@ app.post("/signin", async (req, res) => {
   }
 });
 
-app.get("/search", middleware, async (req, res) => {
-  const { username } = req.query;
-
+app.post("/search", middleware, async (req, res) => {
+  const username = req.query.username;
   if (typeof username !== "string") {
     return res.status(400).json({});
   }
   try {
     const results = await prismaClient.user.findMany({
+      select: {
+        email: true,
+        name: true,
+      },
       where: {
         email: {
           contains: username,

@@ -3,10 +3,14 @@ import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Loader from "../Loader";
+import axios from "axios";
 export default function SignUp() {
   const [loading, setLoading] = useState(false);
+  const emailRef = useRef<HTMLInputElement>(null);
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const nameRef = useRef<HTMLInputElement>(null);
   return (
     <div>
       <div className="place-items-center mt-40 justify-center">
@@ -28,10 +32,11 @@ export default function SignUp() {
                   <Label htmlFor="email">Email</Label>
                   <Input
                     id="email"
+                    ref={emailRef}
                     type="email"
                     placeholder="m@example.com"
                     required
-                    className="mt-2"
+                    className="mt-2 text-black bg-gray-100"
                   />
                 </div>
                 <div className="grid gap-2 mt-2">
@@ -39,10 +44,22 @@ export default function SignUp() {
                     <Label htmlFor="password">Password</Label>
                   </div>
                   <Input
-                    className="mt-2"
+                    ref={passwordRef}
+                    className="mt-2 text-black bg-gray-100"
                     id="password"
                     type="password"
                     required
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="Name">Name</Label>
+                  <Input
+                    ref={nameRef}
+                    id="name"
+                    type="text"
+                    placeholder="Enter Name"
+                    required
+                    className="mt-2 text-black bg-gray-100"
                   />
                 </div>
               </div>
@@ -53,12 +70,20 @@ export default function SignUp() {
               disabled={loading}
               className="bg-gray-800 hover:bg-gray-700 w-full "
               type="submit"
-              onClick={() => {
-                //   TODO  : add signup logic here
-                setLoading(true);
-                setTimeout(() => {
+              onClick={async () => {
+                try {
+                  setLoading(true);
+                  const response = axios.post("http://localhost:3000/signup", {
+                    username: emailRef.current?.value,
+                    password: passwordRef.current?.value,
+                    name: nameRef.current?.value,
+                  });
+                  console.log(response);
                   setLoading(false);
-                }, 2000);
+                } catch (err) {
+                  console.log(err);
+                  setLoading(false);
+                }
               }}
             >
               Create Account

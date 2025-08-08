@@ -6,11 +6,28 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useEffect, useState } from "react";
+import { jwtDecode, type JwtPayload } from "jwt-decode";
+
+interface JWT extends JwtPayload {
+  name: string;
+}
 export default function ChatNav() {
   //  TODO  :  1. user avatar
   //  2 . user name
-  //  3. search bar
-  //  4. chat app name and logo
+  //
+  const [user, setUser] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const decoded: JWT = jwtDecode(token);
+
+      const username = decoded.name;
+      setUser(username);
+    }
+  }, []);
+
   return (
     <div className="flex items-center justify-between mt-4">
       <div className="flex items-center ml-6 gap-4">
@@ -36,6 +53,7 @@ export default function ChatNav() {
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
+            <DropdownMenuItem>Welcome {user}</DropdownMenuItem>
             <DropdownMenuItem>Settings</DropdownMenuItem>
             <DropdownMenuItem>Log Out</DropdownMenuItem>
           </DropdownMenuContent>
